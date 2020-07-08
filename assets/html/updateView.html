@@ -2,9 +2,12 @@
 <html>
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Response View</title>
     <link href="css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -12,14 +15,66 @@
 </head>
 
 <body>
-    <div>
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div id="root"></div>
+    <div class="container pt-4">
+        <div id="location-section">
+            <div class="card">
+                <div class="form-group">
+                    <img src="images/map.png" class="img-fluid" />
+                    <h6>WebCraft IT - 96-FB, Sch.94, Near Pipliyahana Square, Eastern Ring Rd, Indore, Madhya
+                        Pradesh</h6>
+                </div>
+                <div class="form-group">
+                    <label><strong>Latitude </strong></label>
+                    <input type="text" class="in-t form-control" id="latitude" value="22.714777599999998" />
+                </div>
+
+                <div class="form-group">
+                    <label><strong>Longitude</strong></label>
+                    <input type="text" class="in-t form-control" id="longitutde" value="75.9103488" />
+                </div>
+                <hr>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-sm pull-right" id="share-locations"> SHARE YOUR
+                        CURRENT
+                        LOCATION</button>
                 </div>
             </div>
         </div>
+
+        <div class="clearfix"></div>
+
+        <div id="photo-section" class="hide">
+            <div class="card">
+                <div class="form-group">
+                    <label><strong>Photo to Mark Attendance </strong></label>
+                    <small>Your Response</small>
+                    <input type="image" class="in-t form-control" id="photo" src="images/camera.png"
+                        style="width:250px; height: 150px;" />
+                    <p>Tap to open camera</p>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-sm pull-right" id="photo-next"> Next</button>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <div id="notes-section" class="hide">
+            <div class="card">
+                <div class="form-group">
+                    <label><strong>Notes (optional) </strong></label>
+                    <input type="text" class="in-t form-control" id="notes" placeholder="Enter text here" />
+                </div>
+                <hr>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-sm" id="photo-previous"> Previous</button>
+                    <button type="button" class="btn btn-primary btn-sm pull-right" id="submit"> Submit</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
     </div>
 
     <script src="ResponseView.js"></script>

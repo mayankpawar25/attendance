@@ -1,6 +1,6 @@
 {
-    "name": "Attendance",
-    "description": "Mark Attendance",
+    "name": "attendance",
+    "description": "Request Attendance",
     "version": "1.0.0",
     "scripts": {
         "build": "webpack --env.mode=dev --env.watch=false",

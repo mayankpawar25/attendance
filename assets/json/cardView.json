@@ -2,7 +2,8 @@
     "view": {
         "type": "AdaptiveCard",
         "version": "1.0",
-        "body": [{
+        "body": [
+            {
                 "id": "Sender",
                 "type": "TextBlock",
                 "text": "Sender: ${creator[0].displayName}",
@@ -12,12 +13,42 @@
             {
                 "id": "Title",
                 "type": "TextBlock",
-                "text": "Title: ${action.displayName}",
+                "text": "${action.displayName}",
                 "size": "large",
                 "maxLines": 3,
                 "wrap": true,
                 "weight": "bolder",
                 "spacing": "small"
+            },
+            {
+                "id": "Date",
+                "type": "Container",
+                "style": "emphasis",
+                "items": [
+                    {
+                        "type": "TextBlock",
+                        "text": "Till: ${action.dataTables[0].dataColumns[0].options[0].displayName}, ${action.dataTables[0].dataColumns[0].options[1].displayName}",
+                        "size": "medium",
+                        "wrap": true,
+                        "spacing": "medium"
+                    },
+                    {
+                        "type": "TextBlock",
+                        "$when": "${action.dataTables[0].dataColumns[0].options[2].displayName == 'Yes'}",
+                        "text": "With Photo and Location",
+                        "size": "small",
+                        "wrap": true,
+                        "spacing": "medium"
+                    },
+                    {
+                        "type": "TextBlock",
+                        "$when": "${action.dataTables[0].dataColumns[0].options[2].displayName == 'No'}",
+                        "text": "With Location",
+                        "size": "small",
+                        "wrap": true,
+                        "spacing": "medium"
+                    }
+                ]
             },
             {
                 "id": "Summary",
@@ -30,7 +61,8 @@
                 "spacing": "small"
             }
         ],
-        "actions": [{
+        "actions": [
+            {
                 "id": "RespondButton",
                 "$when": "${equals(action.status, 'Active')}",
                 "title": "Respond",

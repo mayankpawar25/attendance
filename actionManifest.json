@@ -1,6 +1,6 @@
 {
-    "id": "com.microsoft.sample.attendance.mayank02072003",
-    "name": "Attendance",
+    "id": "com.microsoft.sample.attendance.mike08072003",
+    "name": "Request Attendance 1",
     "description": "Mark Attendance",
     "provider": {
         "name": "Microsoft",
@@ -10,22 +10,22 @@
     },
     "icon": "images/appIcon.png",
     "actionModel": "actionModel.json",
-    "version": "1.0.0",
+    "version": "1.0.12",
     "views": {
         "CardView": {
             "sourceLocation": "json/cardView.json"
         },
         "LaunchView": {
             "sourceLocation": "html/createView.html",
-            "header": "Mark Attendance"
+            "header": "Request Attendance"
         },
         "UpdateView": {
             "sourceLocation": "html/updateView.html",
-            "header": "Mark Attendance"
+            "header": "Submit your Attendance"
         },
         "DetailView": {
             "sourceLocation": "html/detailView.html",
-            "header": "Your History"
+            "header": "Attendance Card"
         }
     },
     "localizationInfo": {
@@ -34,6 +34,13 @@
             "en-us": "strings/strings.json"
         }
     },
+    "devicePermissions": [
+        "geolocation",
+        "media",
+        "notifications",
+        "midi",
+        "openExternal"
+    ],
     "whitelistedUrlDomains": [
         "ajax.googleapis.com",
         "cdnjs.cloudflare.com",
