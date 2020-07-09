@@ -10,7 +10,7 @@
     },
     "icon": "images/appIcon.png",
     "actionModel": "actionModel.json",
-    "version": "1.0.12",
+    "version": "1.0.56",
     "views": {
         "CardView": {
             "sourceLocation": "json/cardView.json"
@@ -46,6 +46,7 @@
         "cdnjs.cloudflare.com",
         "maxcdn.bootstrapcdn.com",
         "ajax.aspnetcdn.com",
-        "int.actions.office365.com"
+        "int.actions.office365.com",
+        "www.webcraft.co.in"
     ]
 }

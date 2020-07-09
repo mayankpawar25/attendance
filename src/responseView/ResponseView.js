@@ -31,12 +31,23 @@ function getActionInstance(actionId) {
         .then(function (response) {
             console.info("Response: " + JSON.stringify(response));
             actionInstance = response.action;
+            checkExpiry();
         })
         .catch(function (error) {
             console.log("Error: " + JSON.stringify(error));
         });
 }
 
+function checkExpiry() {
+    var current_time = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
+
+    if (actionInstance.expiryTime < current_time) {
+        $('div.container:first').html('');
+        $('div.container:first').html('<div class="card"><div class="form-group"><h4>Action is closed</h4></div></div>');
+    } else {
+        $('#location-section').show();
+    }
+}
 
 $(document).on('click', '#share-locations', function () {
     $('#location-section').hide();
@@ -51,7 +62,32 @@ $(document).on('click', '#share-locations', function () {
 $(document).on('click', '#photo-next', function () {
     $('#photo-section').hide();
     $('#notes-section').show();
+
+    /* Set pic at input in  base 64 */
+
+
 });
+
+
+document.getElementById("mypic").addEventListener("change", readFile);
+
+
+function readFile() {
+
+    if (this.files && this.files[0]) {
+
+        var FR = new FileReader();
+
+        FR.addEventListener("load", function (e) {
+            $("#b64").val(e.target.result);
+        });
+
+        FR.readAsDataURL(this.files[0]);
+    } else {
+        $("#b64").val('');
+    }
+
+}
 
 $(document).on('click', '#photo-previous', function () {
     $('#notes-section').hide();
@@ -113,11 +149,11 @@ function getDataRow(actionId) {
     var dt = [
         { 'lat': $('#latitude').val() },
         { 'long': $('#longitutde').val() },
-        { 'photo': $('#photo').val() },
+        { 'photo': $('#b64').val() },
         { 'notes': $('#notes').val() }
     ];
 
-    row[0] = JSON.stringify(dt);
+    row[1] = JSON.stringify(dt);
 
     var data = {
         id: generateGUID(),
@@ -130,5 +166,58 @@ function getDataRow(actionId) {
     return data;
 }
 
+$(document).on('click', '#photo', function () {
+    $('#mypic').click();
+});
+
+/* Show image at canvas */
+var input = document.querySelector('input[type=file]'); // see Example 4
+input.onchange = function () {
+    var file = input.files[0];
+    //upload(file);
+    drawOnCanvas(file);   // see Example 6
+    //displayAsImage(file); // see Example 7
+};
+
+function upload(file) {
+    var form = new FormData(),
+        xhr = new XMLHttpRequest();
+
+    form.append('image', file);
+    xhr.open('post', 'server.php', true);
+    xhr.send(form);
+}
+
+function drawOnCanvas(file) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        var dataURL = e.target.result,
+            c = document.querySelector('canvas'), // see Example 4
+            ctx = c.getContext('2d'),
+            img = new Image();
+
+        img.onload = function () {
+            c.width = img.width;
+            c.height = img.height;
+            ctx.drawImage(img, 0, 0);
+        };
+
+        img.src = dataURL;
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function displayAsImage(file) {
+    var imgURL = URL.createObjectURL(file),
+        img = document.createElement('img');
+
+    img.onload = function () {
+        URL.revokeObjectURL(imgURL);
+    };
+
+    img.src = imgURL;
+    document.body.appendChild(img);
+}
 
 // *********************************************** SUBMIT ACTION END***********************************************

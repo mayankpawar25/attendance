@@ -72,8 +72,13 @@ function createAction(actionPackageId) {
         },
         {
             name: "Attendance Photo",
-            type: "Text",
+            type: "LargeText",
             value: attendance_photo,
+        },
+        {
+            name: "Notes",
+            type: "LargeText",
+            value: "",
         });
 
     var opt = [
@@ -88,6 +93,10 @@ function createAction(actionPackageId) {
         {
             name: 'Attendance Photo',
             displayName: attendance_photo
+        },
+        {
+            name: 'Notes',
+            displayName: ""
         }
     ];
 

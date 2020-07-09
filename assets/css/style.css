@@ -317,3 +317,29 @@ b, strong {
     
     font-size: 1rem !important;
 }
+ 
+.relative{
+	position:relative;
+	
+}
+#photo{
+    position: relative;
+    z-index: 1;
+    background-color: transparent !important;
+}
+.cam-img{
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 65px;
+    height: 100px;
+    text-align: center;
+    z-index: 0;
+}
+
+.abs-text{
+	position:absolute;
+	width:100%;
+	bottom:0px;
+	text-align:center;	
+}
