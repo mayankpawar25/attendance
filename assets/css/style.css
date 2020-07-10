@@ -343,3 +343,15 @@ b, strong {
 	bottom:0px;
 	text-align:center;	
 }
+.list-design{
+    margin: 0px;
+    padding: 0px;
+    margin-left: 15px;
+}
+.list-design li{
+    border-bottom: 1px solid #ddd;
+    padding: 5px 0px 10px 0px;
+}
+.list-design li:last-child{
+ border:none;
+}

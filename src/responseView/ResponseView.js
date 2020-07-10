@@ -60,8 +60,12 @@ $(document).on('click', '#share-locations', function () {
 });
 
 $(document).on('click', '#photo-next', function () {
-    $('#photo-section').hide();
-    $('#notes-section').show();
+    if ($.trim($('#b64').html()).length > 0) {
+        $('#photo-section').hide();
+        $('#notes-section').show();
+    } else {
+        alert('Please Upload Photo to Mark Attendance');
+    }
 
     /* Set pic at input in  base 64 */
 
@@ -79,12 +83,12 @@ function readFile() {
         var FR = new FileReader();
 
         FR.addEventListener("load", function (e) {
-            $("#b64").val(e.target.result);
+            $("#b64").html(e.target.result);
         });
 
         FR.readAsDataURL(this.files[0]);
     } else {
-        $("#b64").val('');
+        $("#b64").html('');
     }
 
 }
@@ -149,8 +153,9 @@ function getDataRow(actionId) {
     var dt = [
         { 'lat': $('#latitude').val() },
         { 'long': $('#longitutde').val() },
-        { 'photo': $('#b64').val() },
-        { 'notes': $('#notes').val() }
+        { 'photo': $('#b64').html() },
+        { 'notes': $('#notes').val() },
+        { 'address': $('#address').html() },
     ];
 
     row[1] = JSON.stringify(dt);

@@ -58,6 +58,7 @@ function getDataRows(actionId) {
 async function createBody() {
     let getSubscriptionCount = '';
     $('#root').html('');
+    $('#root').show();
 
     /*  Head Section  */
     head();
@@ -110,12 +111,25 @@ async function createBody() {
 function head() {
     var title = actionInstance.displayName;
     var description = actionInstance.properties[0]["value"];
-    var dueby = new Date(actionInstance.expiryTime).toDateString();
+    var date = new Date(actionInstance.expiryTime).toDateString();
+    var hour = new Date(actionInstance.expiryTime).getHours();
+    var minute = new Date(actionInstance.expiryTime).getMinutes();
 
     var $card = $('<div class="card"></div>');
     var $title_sec = $('<h4>' + title + '</h4>');
     var $description_sec = $('<small>' + description + '</small>');
-    var $date_sec = $('<small class="date-color">' + 'Due by ' + dueby + '</small>');
+    var $date_sec = $('<small class="date-color">' + 'Due by ' + date + ', ' + hour + ':' + minute + '</small>');
+
+    var current_time = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
+    console.log('current_time: ' + hour);
+    console.log('current_date: ' + date);
+    // console.log('current_time: ' + current_time);
+    // console.log('actionInstance.expiryTime: ' + actionInstance.expiryTime);
+    if (actionInstance.expiryTime < current_time) {
+        $('#action-status').html('Action is Closed');
+    } else {
+        $('#action-status').html('Action closes on ' + date + ', ' + hour + ':' + minute);
+    }
 
     $card.append($title_sec);
     $card.append($description_sec);
@@ -222,19 +236,30 @@ $(document).on('click', '.getresult', function () {
     console.log('actionDataRows: ' + JSON.stringify(actionDataRows));
 
     $('#root').html('');
-    head();
+    // head();
 
     // var question_content = $('.question-content').clone();
     $('#root').append($('.question-content').clone());
-    createQuestionView(userId);
-
-    footer();
+    $('#root').hide();
+    createAttendanceView(userId);
 });
 
 
-function createQuestionView(userId) {
+function createAttendanceView(userId) {
     $('div#root > div.question-content').html('');
-    var count = 1;
+    var dueby = new Date(actionInstance.expiryTime).toDateString();
+    var myUserId = actionContext.userId;
+    for (let itr = 0; itr < ResponderDate.length; itr++) {
+        if (ResponderDate[itr].value2 == myUserId) {
+            name = "You";
+        } else {
+            name = ResponderDate[itr].label;
+        }
+    }
+
+    $('#name').html(name);
+    $('#dueby').html(dueby);
+
     // console.log(JSON.stringify(actionInstance));
     actionInstance.dataTables.forEach((dataTable) => {
 
@@ -242,17 +267,6 @@ function createQuestionView(userId) {
         // $qDiv.append($linebreak);
 
         dataTable.dataColumns.forEach((question, ind) => {
-            var $cardDiv = $('<div class="card"></div>');
-            var $rowdDiv = $('<div class="row"></div>');
-            var $qDiv = $('<div class="col-sm-12"></div>');
-            $cardDiv.append($rowdDiv);
-            $rowdDiv.append($qDiv);
-
-            var count = ind + 1;
-            var $questionHeading = $('<label></label>');
-            $questionHeading.append("<strong>Question" + count + ". " + question.displayName + "</strong>");
-            $cardDiv.append($questionHeading);
-
             question.options.forEach((option) => {
 
                 /* User Responded */
@@ -264,75 +278,26 @@ function createQuestionView(userId) {
                         var userResponseLength = Object.keys(userResponse).length;
 
                         for (var j = 1; j <= userResponseLength; j++) {
-                            // console.log('isJson(userResponse[' + j + '])' + isJson(userResponse[j]));
-                            if (isJson(userResponse[j])) {
-                                var userResponseAns = JSON.parse(userResponse[j]);
-                                var userResponseAnsLen = userResponseAns.length;
-                                // console.log('userResponseAns: ' + JSON.stringify(userResponseAns));
-                                // console.log('userResponseAnsLen: ' + userResponseAnsLen);
-                                if (userResponseAnsLen > 1) {
-                                    console.log('here if block');
-                                    for (var k = 0; k < userResponseAnsLen; k++) {
-                                        console.log('userResponseAns[k]' + userResponseAns[k]);
-                                        if (userResponseAns[k] == option.name) {
-                                            userResponseAnswer = userResponseAns[k];
-                                            // console.log('if userResponseAnswer' + k + ': ' + JSON.stringify(userResponseAnswer));
-                                        } else {
-                                            continue;
-                                        }
-                                    }
-                                } else {
-                                    userResponseAnswer = userResponseAns;
-                                    // console.log('userResponseAnswer: ' + userResponseAnswer);
-                                }
-                            } else {
-                                console.log('Else: userResponseAns - ' + JSON.stringify(userResponse));
-                                if (userResponse[j] == option.name) {
-                                    userResponseAnswer = userResponse[j];
-                                    // console.log('userResponseAnswer: ' + userResponseAnswer);
-                                }
-                            }
-
-
+                            console.log('Else: userResponseAns - ' + JSON.stringify(userResponse));
+                            userResponseAnswer = JSON.parse(userResponse[j]);
+                            $('#lat').html(userResponseAnswer[0].lat);
+                            $('#long').html(userResponseAnswer[1].long);
+                            $('#photo').attr({ "src": userResponseAnswer[2].photo });
+                            $('#notes').html(userResponseAnswer[3].notes);
+                            $('#address').html(userResponseAnswer[4].address);
+                            /* console.log('lat - ' + userResponseAnswer[0].lat);
+                            console.log('long - ' + userResponseAnswer[1].long);
+                            console.log('photo - ' + userResponseAnswer[2].photo);
+                            console.log('note - ' + userResponseAnswer[3].notes); */
                         }
-
                     }
                 }
 
-                /* Correct Answer */
-                var correctResponse = JSON.parse(actionInstance.properties[1].value);
-                var correctResponseLength = Object.keys(correctResponse).length;
-                var correctAnswer = '';
-                for (let j = 0; j < correctResponseLength; j++) {
-                    console.log('correctResponse: ' + JSON.stringify(correctResponse[j]));
-
-                    var correctResponseAns = correctResponse[j];
-                    console.log('correctResponseAns: ' + JSON.stringify(correctResponseAns));
-                    var correctResponseAnsLen = correctResponseAns.length;
-                    for (let k = 0; k < correctResponseAnsLen; k++) {
-                        if (correctResponseAns[k] == option.name) {
-                            console.log('correctAnswer: ' + JSON.stringify(correctAnswer));
-                            correctAnswer = correctResponseAns[k];
-                        }
-                    }
-
-                }
-
-
-                var $radioOption = getOptions(
-                    option.displayName,
-                    question.name,
-                    option.name,
-                    userResponseAnswer,
-                    correctAnswer
-                );
-                console.log($radioOption);
-                $cardDiv.append($radioOption);
             });
-            $('div.question-content:first').append($cardDiv);
         });
-        count++;
     });
+    $('.attendance-content').show();
+    return;
 }
 
 
@@ -365,10 +330,7 @@ function isJson(str) {
     return true;
 }
 
-function footer() {
-    $('div.question-content').append('<button class="btn btn-primary float-right back">Back</button>');
-}
-
 $(document).on('click', '.back', function () {
+    $('.attendance-content ').hide();
     createBody();
 });

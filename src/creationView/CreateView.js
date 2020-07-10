@@ -76,6 +76,11 @@ function createAction(actionPackageId) {
             value: attendance_photo,
         },
         {
+            name: "Address",
+            type: "LargeText",
+            value: "",
+        },
+        {
             name: "Notes",
             type: "LargeText",
             value: "",
@@ -97,6 +102,10 @@ function createAction(actionPackageId) {
         {
             name: 'Notes',
             displayName: ""
+        },
+        {
+            name: 'Address',
+            displayName: ""
         }
     ];
 
@@ -105,7 +114,7 @@ function createAction(actionPackageId) {
         {
             name: i.toString(),
             displayName: 'Request to mark attendance',
-            valueType: actionSDK.ActionDataColumnValueType.Text,
+            valueType: actionSDK.ActionDataColumnValueType.LargeText,
             allowNullValue: false,
             options: opt
         }
